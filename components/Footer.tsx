@@ -6,11 +6,11 @@ export const Footer = () => {
     <footer className="mt-auto border-t border-white/20 py-6 px-4 text-sm flex flex-col md:flex-row items-center justify-between gap-4">
       {/* Left: Links */}
       <div className="flex flex-wrap gap-4">
-        <Link href="/impressum" className="hover:underline">
+        <Link href="/imprint" className="hover:underline">
           Impressum
         </Link>
         <a
-          href="https://www.buymeacoffee.com/YOUR_USERNAME"
+          href="https://buymeacoffee.com/thomasfplea"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:underline"
@@ -18,7 +18,7 @@ export const Footer = () => {
           Buy me a coffee
         </a>
         <a
-          href="https://github.com/YOUR_GITHUB/chess-in-the-dark"
+          href="https://github.com/tho-ple/chess-in-the-dark"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:underline"

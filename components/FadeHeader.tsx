@@ -1,6 +1,7 @@
 // components/FadeHeader.tsx
 'use client';
 import { useEffect, useState } from 'react';
+import Link from "next/link";
 
 export const FadeHeader = () => {
   const [fadeChess, setFadeChess] = useState(false);
@@ -18,11 +19,12 @@ export const FadeHeader = () => {
       <h1 className="text-3xl font-bold mb-2">
         <span className="relative inline-block mr-2">
           <span
-            className={`transition-opacity duration-2000 ${
-              fadeChess ? 'opacity-0' : 'opacity-100'
-            }`}
+            className={`transition-opacity duration-2000 ${fadeChess ? 'opacity-0' : 'opacity-100'
+              }`}
           >
-            Chess
+            <Link href="/">
+              Chess
+            </Link>
           </span>
           <span
             className="absolute left-0 right-0 bottom-[-4px] h-[2px] bg-white"
