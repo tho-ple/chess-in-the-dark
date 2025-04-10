@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ColorSquareExercise } from './exercises/ColorsSquareExercise';
+import { SafeAttackExercise } from './exercises/SafeAttackExercise';
 
 type ExerciseItem = {
   name: string;
@@ -13,6 +14,12 @@ const exercises: ExerciseItem[] = [
     name: 'Color of the Square',
     description: 'Identify whether the given square is black or white.',
     component: <ColorSquareExercise />,
+  },
+  {
+    name: 'Safe Attack',
+    description:
+      'Choose the square where your piece can attack safely without being captured.',
+    component: <SafeAttackExercise />,
   },
 ];
 
