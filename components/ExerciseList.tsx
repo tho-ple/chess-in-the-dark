@@ -5,7 +5,7 @@ import { ColorSquareExercise } from './exercises/ColorsSquareExercise';
 type ExerciseItem = {
   name: string;
   description: string;
-  component: JSX.Element;
+  component: React.JSX.Element;
 };
 
 const exercises: ExerciseItem[] = [
