@@ -12,7 +12,12 @@ const getRandomSquare = (): string => {
 const isWhiteSquare = (square: string): boolean => {
   const fileCode = square.charCodeAt(0); // A=65
   const rank = parseInt(square[1], 10);
-  return (fileCode % 2 === 0) ^ (rank % 2 === 0);
+
+  const xor = (a: any, b: any): boolean => {
+    return !!a !== !!b;
+  };
+
+  return xor(fileCode % 2 === 0, rank % 2 === 0);
 };
 
 export const ColorSquareExercise = () => {
