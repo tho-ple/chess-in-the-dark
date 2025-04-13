@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ToggleBoardButton } from '../ToggleBoardButton';
+import { SquareInput } from '@/components/ui/square-input';
 
 type SafeAttackScenario = {
   id: number;
@@ -61,21 +62,21 @@ export const SafeAttackExercise = () => {
       <h2 className="text-xl font-semibold">Safe Attack Exercise</h2>
 
       <p>
-  You have a <strong>{currentScenario.attacker}</strong> on{' '}
-  <strong>{currentScenario.attackerSquare}</strong>. An enemy{' '}
-  <strong>{currentScenario.targetPiece}</strong> is on{' '}
-  <strong>{currentScenario.targetSquare}</strong>, and another enemy{' '}
-  <strong>{currentScenario.blockerPiece}</strong> is on{' '}
-  <strong>{currentScenario.blockerSquare}</strong>.
-</p>
+        You have a <strong>{currentScenario.attacker}</strong> on{' '}
+        <strong>{currentScenario.attackerSquare}</strong>. An enemy{' '}
+        <strong>{currentScenario.targetPiece}</strong> is on{' '}
+        <strong>{currentScenario.targetSquare}</strong>, and another enemy{' '}
+        <strong>{currentScenario.blockerPiece}</strong> is on{' '}
+        <strong>{currentScenario.blockerSquare}</strong>.
+      </p>
 
       <p>Which square can you safely move to, to attack?</p>
 
-      <input
+      <SquareInput
         value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Enter square (e.g. E5)"
-        className="w-full p-2 bg-black border border-white/30 rounded text-white placeholder-white/40"
+        onChange={setInput}
+        placeholder="Enter square (e.g. C3)"
+        allowMultiple={false}
       />
 
       <button
@@ -107,14 +108,14 @@ export const SafeAttackExercise = () => {
         </button>
       )}
 
-<div className="flex items-center justify-between text-sm text-white/40 mt-4">
-  <div>
-    Current Streak: <span className="text-white font-bold">{streak}</span>
-  </div>
-  <ToggleBoardButton />
-</div>
+      <div className="flex items-center justify-between text-sm text-white/40 mt-4">
+        <div>
+          Current Streak: <span className="text-white font-bold">{streak}</span>
+        </div>
+        <ToggleBoardButton />
+      </div>
 
-      
+
     </div>
   );
 };
