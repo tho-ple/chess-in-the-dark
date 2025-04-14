@@ -1,30 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SquareInput } from '@/components/ui/square-input';
-
-type ConnectSquaresScenario = {
-    id: number;
-    piece: string;
-    squareA: string;
-    squareB: string;
-    correctAnswer: string | string[];
-    explanation: string;
-};
-
-const scenarios: ConnectSquaresScenario[] = [
-    {
-        id: 1,
-        piece: 'Bishop',
-        squareA: 'G5',
-        squareB: 'G1',
-        correctAnswer: ['C3', 'F4'],
-        explanation: 'Bishop on C3 or F4 can attack both G5 and G1.',
-    },
-];
-
+import { getRandomScenario } from '@/lib/utils';
+import { ConnectSquaresScenario } from '@/types/exercise-types';
+import { scenarios } from '@/data/connect-squares-scenarios';
 
 export const ConnectSquaresExercise = () => {
-    const [currentScenario] = useState(scenarios[0]); // Expand later
+    const [currentScenario, setCurrentScenario] = useState(() =>
+        getRandomScenario(scenarios)
+    );
     const [input, setInput] = useState('');
     const [streak, setStreak] = useState(0);
     const [feedback, setFeedback] = useState<null | 'correct' | 'wrong'>(null);
@@ -32,50 +16,65 @@ export const ConnectSquaresExercise = () => {
 
     const handleSubmit = () => {
         const normalized = input
-          .toUpperCase()
-          .replace(/\s+/g, '')
-          .split(',')
-          .filter(Boolean);
-      
+            .toUpperCase()
+            .replace(/\s+/g, '')
+            .split(',')
+            .filter(Boolean);
+
         const correctAnswers = getCorrectAnswers(currentScenario);
-      
+
         const isMatch =
-          normalized.length === correctAnswers.length &&
-          normalized.every((sq) => correctAnswers.includes(sq)) &&
-          correctAnswers.every((sq) => normalized.includes(sq));
-      
+            normalized.length === correctAnswers.length &&
+            normalized.every((sq) => correctAnswers.includes(sq)) &&
+            correctAnswers.every((sq) => normalized.includes(sq));
+
         if (isMatch) {
-          setFeedback('correct');
-          setStreak((prev) => prev + 1);
+            setFeedback('correct');
+            setStreak((prev) => prev + 1);
         } else {
-          setFeedback('wrong');
-          setStreak(0);
+            setFeedback('wrong');
+            setStreak(0);
         }
-      
+
         setShowExplanation(true);
-      };
+    };
 
     const getCorrectAnswers = (scenario: ConnectSquaresScenario) => {
         return Array.isArray(scenario.correctAnswer)
-          ? scenario.correctAnswer.map((s) => s.toUpperCase())
-          : [scenario.correctAnswer.toUpperCase()];
-      };
+            ? scenario.correctAnswer.map((s) => s.toUpperCase())
+            : [scenario.correctAnswer.toUpperCase()];
+    };
 
     const handleNext = () => {
         setInput('');
         setFeedback(null);
         setShowExplanation(false);
-        // Later: load random or next scenario
+        setCurrentScenario(getRandomScenario(scenarios));;
     };
+
+    useEffect(() => {
+        if (feedback === 'correct') {
+            const timer = setTimeout(() => {
+                handleNext();
+            }, 1000); // delay in milliseconds
+            return () => clearTimeout(timer);
+        }
+    }, [feedback]);
 
     return (
         <div className="p-6 border border-white/20 rounded-xl text-left max-w-xl mx-auto space-y-4">
             <h2 className="text-xl font-semibold">Connect the Squares</h2>
 
-            <p>
-                Which square could a <strong>{currentScenario.piece}</strong> be on to attack both{' '}
+            <p className="text-lg">
+                From which square can a <strong>{currentScenario.piece}</strong> attack{' '}
                 <strong>{currentScenario.squareA}</strong> and{' '}
-                <strong>{currentScenario.squareB}</strong>?
+                <strong>{currentScenario.squareB}</strong>
+                {currentScenario.squareC && (
+                    <>
+                        {' '}and <strong>{currentScenario.squareC}</strong>
+                    </>
+                )}
+                ?
             </p>
 
             <SquareInput
@@ -107,12 +106,12 @@ export const ConnectSquaresExercise = () => {
                 </div>
             )}
 
-            {(feedback === 'correct' || feedback === 'wrong') && (
+            {(feedback === 'wrong') && (
                 <button
                     onClick={handleNext}
                     className="mt-4 text-sm text-white/60 hover:underline"
                 >
-                    Try again (More scenarios coming soon)
+                    Try again
                 </button>
             )}
 
