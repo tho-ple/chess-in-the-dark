@@ -115,7 +115,6 @@ export const SafeAttackExercise = () => {
         <ToggleBoardButton />
       </div>
 
-
     </div>
   );
 };

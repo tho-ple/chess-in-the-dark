@@ -4,6 +4,8 @@ import { SquareInput } from '@/components/ui/square-input';
 import { getRandomScenario } from '@/lib/utils';
 import { ConnectSquaresScenario } from '@/types/exercise-types';
 import { scenarios } from '@/data/connect-squares-scenarios';
+import { ToggleBoardButton } from '../ToggleBoardButton';
+
 
 export const ConnectSquaresExercise = () => {
     const [currentScenario, setCurrentScenario] = useState(() =>
@@ -116,10 +118,11 @@ export const ConnectSquaresExercise = () => {
             )}
 
             <div className="flex items-center justify-between text-sm text-white/40 mt-4">
-                <div>
-                    Current Streak: <span className="text-white font-bold">{streak}</span>
-                </div>
-            </div>
+                    <div>
+                      Current Streak: <span className="text-white font-bold">{streak}</span>
+                    </div>
+                    <ToggleBoardButton />
+                  </div>
         </div>
     );
 };
