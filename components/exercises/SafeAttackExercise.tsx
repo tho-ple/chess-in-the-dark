@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ToggleBoardButton } from '../ToggleBoardButton';
-import { SquareInput } from '@/components/ui/square-input';
+import { SingleSquareInput } from '@/components/ui/single-square-input';
 
 type SafeAttackScenario = {
   id: number;
@@ -72,11 +72,10 @@ export const SafeAttackExercise = () => {
 
       <p>Which square can you safely move to, to attack?</p>
 
-      <SquareInput
+      <SingleSquareInput
         value={input}
         onChange={setInput}
         placeholder="Enter square (e.g. C3)"
-        allowMultiple={false}
       />
 
       <button

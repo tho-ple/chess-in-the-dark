@@ -1,43 +1,37 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-type SquareInputProps = {
+type Props = {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  allowMultiple?: boolean;
 };
 
 const isValidSquare = (sq: string) => /^[A-H][1-8]$/.test(sq);
 
-export const SquareInput = ({
+export const MultiSquareInput = ({
   value,
   onChange,
-  placeholder = 'Enter square(s)',
-  allowMultiple = false,
-}: SquareInputProps) => {
+  placeholder = 'Enter squares (e.g. A1, C3)',
+}: Props) => {
   const [input, setInput] = useState(value);
   const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
-    // Normalize input: turn spaces into commas, remove extras
+    setInput(value);
+  }, [value]);
+
+  useEffect(() => {
     const raw = input.toUpperCase().replace(/\s+/g, ',');
-    const cleanedSquares = raw
+    const squares = raw
       .split(',')
       .map((sq) => sq.trim())
       .filter(Boolean);
 
-    if (allowMultiple) {
-      const allValid = cleanedSquares.every(isValidSquare);
-      setIsValid(allValid);
-      onChange(cleanedSquares.join(','));
-    } else {
-      // Must be exactly one valid square
-      const valid = cleanedSquares.length === 1 && isValidSquare(cleanedSquares[0]);
-      setIsValid(valid);
-      onChange(cleanedSquares[0] || '');
-    }
-  }, [input, allowMultiple, onChange]);
+    const allValid = squares.every(isValidSquare);
+    setIsValid(allValid);
+    onChange(squares.join(','));
+  }, [input, onChange]);
 
   return (
     <div className="w-full">
@@ -51,9 +45,7 @@ export const SquareInput = ({
       />
       {!isValid && (
         <p className="text-sm text-red-500 mt-1">
-          {allowMultiple
-            ? 'Enter valid squares (A1–H8), separated by space or comma.'
-            : 'Enter one valid square (A1–H8). Do not enter multiple.'}
+          Enter valid squares (A1–H8), separated by commas or spaces.
         </p>
       )}
     </div>

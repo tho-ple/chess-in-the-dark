@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { SquareInput } from '@/components/ui/square-input';
+import { MultiSquareInput } from '@/components/ui/multiple-square-input';
 import { getRandomScenario } from '@/lib/utils';
 import { ConnectSquaresScenario } from '@/types/exercise-types';
 import { scenarios } from '@/data/connect-squares-scenarios';
@@ -48,10 +48,10 @@ export const ConnectSquaresExercise = () => {
     };
 
     const handleNext = () => {
-        setInput('');
         setFeedback(null);
         setShowExplanation(false);
-        setCurrentScenario(getRandomScenario(scenarios));;
+        setCurrentScenario(getRandomScenario(scenarios));
+        setInput('');
     };
 
     useEffect(() => {
@@ -79,11 +79,10 @@ export const ConnectSquaresExercise = () => {
                 ?
             </p>
 
-            <SquareInput
+            <MultiSquareInput
                 value={input}
                 onChange={setInput}
                 placeholder="Enter square (e.g. C3)"
-                allowMultiple={true}
             />
 
             <button
