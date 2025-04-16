@@ -1,19 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { isKnightMove, generateKnightTour } from '@/lib/utils';
+import { generateKnightTour } from '@/lib/utils';
+import { ToggleBoardButton } from '../ToggleBoardButton';
+import { isKnightMove } from '@/lib/utils';
 
 export const KnightTourExercise = () => {
   const [path, setPath] = useState<string[]>([]);
   const [inputs, setInputs] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<null | 'correct' | 'wrong'>(null);
+  const [streak, setStreak] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const start = path[0];
-  const end = path[path.length - 1];
-  const numIntermediate = path.length - 2;
-
-  const generateNewPath = () => {
-    const newPath = generateKnightTour(Math.floor(Math.random() * 3) + 4); // 4–6 squares
+  const handleNext = () => {
+    const newPath = generateKnightTour(4 + Math.floor(Math.random() * 3)); // 4–6 moves
     setPath(newPath);
     setInputs(Array(newPath.length - 2).fill(''));
     setFeedback(null);
@@ -21,57 +20,64 @@ export const KnightTourExercise = () => {
   };
 
   useEffect(() => {
-    generateNewPath();
+    handleNext();
   }, []);
 
-  const handleInputChange = (index: number, value: string) => {
+  const handleInputChange = (value: string, index: number) => {
     const updated = [...inputs];
-    updated[index] = value.toUpperCase().trim();
+    updated[index] = value.toUpperCase();
     setInputs(updated);
   };
 
-  const handleSubmit = () => {
-    const userPath = [start, ...inputs, end];
-
-    const allValidMoves = userPath.every((sq) => /^[A-H][1-8]$/.test(sq));
-    if (!allValidMoves) {
-      setFeedback('wrong');
-      setShowExplanation(true);
-      return;
+  const validatePath = (): boolean => {
+    const fullPath = [path[0], ...inputs, path[path.length - 1]];
+    for (let i = 0; i < fullPath.length - 1; i++) {
+      if (!isKnightMove(fullPath[i], fullPath[i + 1])) {
+        return false;
+      }
     }
-
-    const valid = userPath.every((sq, i) =>
-      i === userPath.length - 1 ? true : isKnightMove(sq, userPath[i + 1])
-    );
-
-    setFeedback(valid ? 'correct' : 'wrong');
-    setShowExplanation(true);
+    const unique = new Set(fullPath);
+    return unique.size === fullPath.length; // no duplicates
   };
 
-  const handleNext = () => {
-    generateNewPath();
+  const handleSubmit = () => {
+    if (inputs.some((i) => i.trim() === '')) return;
+
+    const isCorrect = validatePath();
+
+    if (isCorrect) {
+      setFeedback('correct');
+      setStreak((prev) => prev + 1);
+    } else {
+      setFeedback('wrong');
+      setStreak(0);
+    }
+
+    setShowExplanation(true);
   };
 
   return (
     <div className="p-6 border border-white/20 rounded-xl text-left max-w-xl mx-auto space-y-4">
-      <h2 className="text-xl font-semibold">Knight’s Tour</h2>
+      <h2 className="text-xl font-semibold">Knight Tour</h2>
 
       <p className="text-lg">
-        Connect the knight from <strong>{start}</strong> to <strong>{end}</strong> using valid knight moves.
+        Enter a valid knight path from <strong>{path[0]}</strong> to <strong>{path[path.length - 1]}</strong>
+        , using exactly {path.length - 2} intermediate squares.
       </p>
 
-      <div className="flex gap-2 items-center flex-wrap text-white">
-        <div className="px-3 py-1 rounded bg-white/10">{start}</div>
-        {inputs.map((val, i) => (
+      <div className="flex space-x-2 text-lg font-mono text-white">
+        <span className="px-2 py-1 border border-white/30 rounded">{path[0]}</span>
+        {inputs.map((input, idx) => (
           <input
-            key={i}
-            value={val}
-            onChange={(e) => handleInputChange(i, e.target.value)}
-            placeholder="_"
-            className="w-16 text-center p-2 rounded bg-black border border-white/30 text-white placeholder-white/40"
+            key={idx}
+            value={input}
+            onChange={(e) => handleInputChange(e.target.value, idx)}
+            className="w-14 text-center px-2 py-1 border border-white/30 bg-black rounded placeholder-white/30"
+            placeholder={`_`}
+            maxLength={2}
           />
         ))}
-        <div className="px-3 py-1 rounded bg-white/10">{end}</div>
+        <span className="px-2 py-1 border border-white/30 rounded">{path[path.length - 1]}</span>
       </div>
 
       <button
@@ -82,20 +88,35 @@ export const KnightTourExercise = () => {
       </button>
 
       {feedback === 'correct' && (
-        <div className="text-green-400 font-semibold">✔ Correct knight path!</div>
+        <div className="text-green-400 font-semibold">✔ Correct!</div>
       )}
       {feedback === 'wrong' && (
-        <div className="text-red-400 font-semibold">✘ Invalid knight path</div>
+        <div className="text-red-400 font-semibold">✘ Wrong path</div>
       )}
 
-      {showExplanation && (
+      {showExplanation && feedback === 'wrong' && (
+        <div className="text-sm text-white/70 mt-2 italic">
+          One or more moves were not valid knight moves, or you repeated a square.
+          <br />
+          Example path: {path.join(' → ')}
+        </div>
+      )}
+
+      {feedback && (
         <button
           onClick={handleNext}
           className="mt-4 text-sm text-white/60 hover:underline"
         >
-          Try another
+          Next
         </button>
       )}
+
+      <div className="flex items-center justify-between text-sm text-white/40 mt-4">
+        <div>
+          Current Streak: <span className="text-white font-bold">{streak}</span>
+        </div>
+        <ToggleBoardButton />
+      </div>
     </div>
   );
 };
