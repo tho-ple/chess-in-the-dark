@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ColorSquareExercise } from './exercises/ColorsSquareExercise';
 import { SafeAttackExercise } from './exercises/SafeAttackExercise';
 import { ConnectSquaresExercise } from './exercises/ConnectSquaresExercise';
+import { KnightTourExercise } from './exercises/KnightTourExercise';
 
 type ExerciseItem = {
   name: string;
@@ -26,6 +27,11 @@ const exercises: ExerciseItem[] = [
     name: 'Connect the Squares',
     description: 'Find a square from which the given piece can attack two targets.',
     component: <ConnectSquaresExercise />,
+  },
+  {
+    name: 'Knight Tour',
+    description: 'Find the square the Knight need to pass to reach the other square.',
+    component: <KnightTourExercise />,
   },
 ];
 
