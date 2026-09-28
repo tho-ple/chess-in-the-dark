@@ -5,6 +5,7 @@ import { SafeAttackExercise } from './exercises/SafeAttackExercise';
 import { MateInOneExercise } from './exercises/MateInOneExercise';
 import { ConnectSquaresExercise } from './exercises/ConnectSquaresExercise';
 import { KnightTourExercise } from './exercises/KnightTourExercise';
+import { GuessSquareExercise } from './exercises/GuessSquareExercise';
 
 type ExerciseItem = {
   name: string;
@@ -39,6 +40,12 @@ const exercises: ExerciseItem[] = [
     name: 'Knight Tour',
     description: 'Find the square the Knight need to pass to reach the other square.',
     component: <KnightTourExercise />,
+  },
+  {
+    name: 'Color of the Square (progressive)',
+    description:
+      'Name the color of the square from memory, starting small and growing to the whole board.',
+    component: <GuessSquareExercise />,
   },
 ];
 
