@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { ColorSquareExercise } from './exercises/ColorsSquareExercise';
 import { SafeAttackExercise } from './exercises/SafeAttackExercise';
+import { MateInOneExercise } from './exercises/MateInOneExercise';
 import { ConnectSquaresExercise } from './exercises/ConnectSquaresExercise';
 import { KnightTourExercise } from './exercises/KnightTourExercise';
 
@@ -22,6 +23,12 @@ const exercises: ExerciseItem[] = [
     description:
       'Choose the square where your piece can attack safely without being captured.',
     component: <SafeAttackExercise />,
+  },
+  {
+    name: 'Mate in One',
+    description:
+      'White to move: find the square where you can checkmate the enemy king in a single move.',
+    component: <MateInOneExercise />,
   },
   {
     name: 'Connect the Squares',
